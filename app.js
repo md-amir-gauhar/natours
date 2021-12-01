@@ -38,7 +38,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
   if (!tour) {
     return res.status(404).json({
       status: "failed",
-      messsage: "Invalid Id"
+      message: "Invalid Id"
     })
   }
 
@@ -65,6 +65,36 @@ app.post('/api/v1/tours', (req, res) => {
         tour: newTour
       }
     })
+  })
+})
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id >= tours.length) {
+    return res.status(404).json({
+      status: "failed",
+      message: "Invalid Id"
+    })
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      tour: '<updated tour here....>'
+    }
+  })
+})
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id >= tours.length) {
+    return res.status(404).json({
+      status: "failed",
+      message: "Invalid Id"
+    })
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null
   })
 })
 
