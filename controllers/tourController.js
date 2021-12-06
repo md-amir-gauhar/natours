@@ -1,17 +1,9 @@
-const fs = require('fs');
+const Tour = require('../models/tourModel');
 
+/* Just for testing purpose
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../data/data/tours-simple.json`));
+*/
 
-const checkId = (req, res, next, val) => {
-  console.log(`Tour id is: ${val}`);
-  if (req.params.id >= tours.length) {
-    return res.status(404).json({
-      status: "failed",
-      message: "Invalid Id"
-    })
-  }
-  next();
-}
 
 const checkBody = (req, res, next) => {
   if (!req.body.name || !req.body.price) {
@@ -28,10 +20,10 @@ const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     requestedAT: req.requestTime,
-    results: tours.length,
-    data: {
-      tours
-    }
+    // results: tours.length,
+    // data: {
+    //   tours
+    // }
   })
 }
 
@@ -39,16 +31,18 @@ const getTour = (req, res) => {
   console.log(req.params);
 
   const id = +req.params.id;
-  const tour = tours.find((el) => el.id === id);
+  // const tour = tours.find((el) => el.id === id);
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      tours: tour
-    }
-  })
+  // res.status(200).json({
+  //   status: "success",
+  //   data: {
+  //     tours: tour
+  //   }
+  // })
 }
 
+/*
+-----Just for testing purpose-----
 const createTour = (req, res) => {
   // console.log(req.body);
   const newID = tours[tours.length - 1].id + 1;
@@ -63,6 +57,16 @@ const createTour = (req, res) => {
         tour: newTour
       }
     })
+  })
+}
+*/
+
+const createTour = (req, res) => {
+  res.status(201).json({
+    status: "success",
+    data: {
+      tour: newTour
+    }
   })
 }
 
@@ -82,4 +86,4 @@ const deleteTour = (req, res) => {
   })
 }
 
-module.exports = { getAllTours, createTour, getTour, updateTour, deleteTour, checkId, checkBody };
+module.exports = { getAllTours, createTour, getTour, updateTour, deleteTour, checkBody };
