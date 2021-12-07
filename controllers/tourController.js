@@ -9,8 +9,35 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/../data/data/tours-simple
 
 const getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    console.log(req.query);
+    // Build Query
+    // 1a) Filtering
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(el => delete queryObj[el]);
+    console.log(queryObj)
 
+    // 1b) Advanced Filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+
+
+    // console.log(JSON.parse(queryStr))
+
+    let query = Tour.find(JSON.parse(queryStr));
+
+
+    // Execute query
+    const tours = await query;
+
+    // const query = await Tour
+    //   .find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy')
+
+    // Send response
     res.status(200).json({
       status: 'success',
       requestedAT: req.requestTime,
