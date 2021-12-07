@@ -9,7 +9,7 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/../data/data/tours-simple
 
 const getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
+    // console.log(req.query);
     // Build Query
     // 1a) Filtering
     const queryObj = { ...req.query };
@@ -34,7 +34,19 @@ const getAllTours = async (req, res) => {
 
       query = query.sort(sortBy);
     } else {
-      query = query.sort('-createdAt')
+      query = query.sort('-createdAt');
+    }
+
+
+    // 3) Field Limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+
+      console.log(fields)
+
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
     }
 
     // Execute query
